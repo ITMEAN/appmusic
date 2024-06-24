@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans');
+
+.app {
+    width: 100%;
+    
+    background-color: #170F23 ;
+    
+   
+   
+    
+
+}
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Josefin Sans', cursive;
+
+}
