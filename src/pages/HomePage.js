@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import "../styles/homepage.css";
 import { useAppContext } from "../context/AppContext";
 import SliderNewAllBUm from "../components/SliderNewAlbum";
-import { ApiAllSong, ApiAllCategory } from "../api/indext";
-import AddToListDropdown from "../components/AddToListDropdown.jsx";
-import CategoryItem from "../components/CateroryItem.jsx";
 import { getAllSong, getSongByContry } from "../service/SongService.js";
 import { getAllCategory } from "../service/CategoryService.js";
+import AddToListDropdown from "../components/AddToListDropdown.jsx";
+import CategoryItem from "../components/CateroryItem.jsx";
+
 function Home() {
   const [selectedFilter, setSelectedFilter] = useState("");
   const { state, dispatch } = useAppContext();
@@ -15,6 +15,8 @@ function Home() {
   const [listSongVN, setListSongVN] = useState([]);
   const [listSongUS, setListSongUS] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true); // Added loading state
+
   useEffect(() => {
     if (selectedFilter === "ALL") {
       dispatch({ type: "SET_LIST_SONG", payload: listSongALL });
@@ -23,9 +25,11 @@ function Home() {
     } else if (selectedFilter === "US") {
       dispatch({ type: "SET_LIST_SONG", payload: listSongUS });
     }
-  }, [selectedFilter]);
+  }, [selectedFilter, listSongALL, listSongVN, listSongUS, dispatch]);
+
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true); // Set loading to true before fetching data
       try {
         const [allSongs, vnSongs, usSongs, categories] = await Promise.all([
           getAllSong(),
@@ -37,12 +41,12 @@ function Home() {
         setListSongVN(vnSongs);
         setListSongUS(usSongs);
         setCategories(categories.categories);
-        console.log("categories:")
-        console.log(categories);
         setSelectedFilter("ALL");
       } catch (error) {
         console.error("Error fetching data:", error);
         // Handle error if needed
+      } finally {
+        setLoading(false); // Set loading to false after fetching data
       }
     };
     fetchData();
@@ -59,6 +63,11 @@ function Home() {
   const handleChangeSong = (index) => {
     dispatch({ type: "SET_CURRENT_SONG", payload: index });
   };
+
+  if (loading) {
+    return <div className="loading">Loading...</div>; // Show loading indicator
+  }
+
   return (
     <div className="homepage">
       <h4 className="title-category">KHÁM PHÁ ALBUM</h4>
@@ -101,49 +110,45 @@ function Home() {
       </div>
 
       <div className="song-container">
-        {state.listSong.map((item, index) => {
-          return (
-            <div
-              className="song"
-              onClick={() => handleChangeSong(index)}
+        {state.listSong.map((item, index) => (
+          <div
+            className="song"
+            onClick={() => handleChangeSong(index)}
+            style={{
+              backgroundColor:
+                item.id === songCurrent ? "#2F2739" : "#170F23",
+            }}
+            key={item.id}
+          >
+            <img
+              className="image"
+              src={item.img}
               style={{
-                backgroundColor:
-                  item.id === songCurrent ? "#2F2739" : "#170F23",
+                display: "flex",
+                width: '30%',
+                height: "100%",
+                objectFit: "contain",
               }}
-            >
-              <img
-                className="image"
-                src={item.img}
-                style={{
-                  display: "flex",
-                  width: '30%',
-                  height: "100%",
-                  objectFit: "contain",
-                }}
-              ></img>
-              <div className="info">
-                <h6 className="name">{item.name}</h6>
-                <span className="artist" style={{ color: "#8B8791" }}>
-                  {getArtistsName(item)}
-                </span>
-              </div>
-              <AddToListDropdown songId={item.id} />
+              alt={item.name}
+            />
+            <div className="info">
+              <h6 className="name">{item.name}</h6>
+              <span className="artist" style={{ color: "#8B8791" }}>
+                {getArtistsName(item)}
+              </span>
             </div>
-          );
-        })}
+            <AddToListDropdown songId={item.id} />
+          </div>
+        ))}
       </div>
-     
-        <h4 className="title-category">THỂ LOẠI</h4>
-        <div style={{width:'100%',display:'flex',alignItems:'start',backgroundColor:"#170F23",flexDirection:'column'}}>
-            {Array.isArray(categories) &&
-                categories.map((item,index) => {
-                    return (
-                        <CategoryItem key={item} category={item} />
-                    );
-                })}
 
-        </div>
-      
+      <h4 className="title-category">THỂ LOẠI</h4>
+      <div style={{ width: '100%', display: 'flex', alignItems: 'start', backgroundColor: "#170F23", flexDirection: 'column' }}>
+        {Array.isArray(categories) &&
+          categories.map((item, index) => (
+            <CategoryItem key={item} category={item} />
+          ))}
+      </div>
     </div>
   );
 }
