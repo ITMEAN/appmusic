@@ -11,10 +11,9 @@ export default function LoadingModal({ showed, onHide }) {
   return (
     <Modal show={showed} onHide={onHide}>
       <Modal.Header closeButton>
-        <Modal.Title>Đăng nhập</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-         <h1>Loading...</h1>
+         <h1 style={{textAlign:'center'}}>Loading...</h1>
          <Spinner animation="border" role="status"></Spinner>
       </Modal.Body>
     </Modal>
