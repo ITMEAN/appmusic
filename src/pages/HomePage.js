@@ -6,6 +6,7 @@ import { getAllSong, getSongByContry } from "../service/SongService.js";
 import { getAllCategory } from "../service/CategoryService.js";
 import AddToListDropdown from "../components/AddToListDropdown.jsx";
 import CategoryItem from "../components/CateroryItem.jsx";
+import LoadingModal from "../components/ModalLoading.jsx";
 
 function Home() {
   const [selectedFilter, setSelectedFilter] = useState("");
@@ -16,6 +17,9 @@ function Home() {
   const [listSongUS, setListSongUS] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true); // Added loading state
+  const handleCloseModal = () => {
+     setLoading(false);
+  }
 
   useEffect(() => {
     if (selectedFilter === "ALL") {
@@ -29,7 +33,7 @@ function Home() {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true); // Set loading to true before fetching data
+      setLoading(true); 
       try {
         const [allSongs, vnSongs, usSongs, categories] = await Promise.all([
           getAllSong(),
@@ -65,11 +69,13 @@ function Home() {
   };
 
   if (loading) {
-    return <div className="loading">Loading...</div>; // Show loading indicator
+    return  <LoadingModal showed={loading} onHide={handleCloseModal} />
   }
 
   return (
+
     <div className="homepage">
+     
       <h4 className="title-category">KHÁM PHÁ ALBUM</h4>
       <SliderNewAllBUm />
       <h4 className="title-category">MỚI PHÁT HÀNH</h4>
