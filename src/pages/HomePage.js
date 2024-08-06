@@ -134,7 +134,7 @@ function Home() {
       </div>
      
         <h4 className="title-category">THỂ LOẠI</h4>
-        <div style={{width:'100%',display:'grid',alignItems:'start',backgroundColor:"#170F23"}}>
+        <div style={{width:'100%',display:'flex',alignItems:'start',backgroundColor:"#170F23",flexDirection:'column'}}>
             {Array.isArray(categories) &&
                 categories.map((item,index) => {
                     return (

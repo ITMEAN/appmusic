@@ -13,7 +13,8 @@ export default async function requestApi(endpoint, method, body, isInterceptors,
         "Access-Control-Allow-Origin": "*",
     };
 
-    let baseURL = "http://localhost:8080/api/v1/"
+    let baseURL = "https://musicapp-jzle.onrender.com/api/v1/"
+    // let baseURL = "http://localhost:8080/api/v1/"
 
     const instance = axios.create({ headers, baseURL });
 
@@ -45,6 +46,7 @@ export default async function requestApi(endpoint, method, body, isInterceptors,
                 if (error.response && error.response.status === 403) {
                     try {
                         const token = localStorage.getItem('token');
+                        
                         if (token) {
                             const tokenRequest = JSON.parse(token);
                             const result = await instance.post(`/auth/refreshToken`, { refreshToken: tokenRequest.refreshToken });

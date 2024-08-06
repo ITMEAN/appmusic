@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import { ApiInsertArtist, ApiInsertSong } from "../api/indext";
 import { Button, Form, FormGroup, Modal, Row } from "react-bootstrap";
 import "../styles/modalsongalbum.css";
-import { deleteSongSave, resetSongSave, useAppContext } from "../context/AppContext";
+import {
+  deleteSongSave,
+  resetSongSave,
+  useAppContext,
+} from "../context/AppContext";
 import getToken from "../token/token";
 import { addSong } from "../service/SongService";
 
@@ -24,7 +28,7 @@ function ModelSongAlbum({
   const [mp3, setMp3] = useState(null);
   const [show, setShow] = useState();
   const [previewImage, setPreviewImage] = useState(null);
- 
+
   const [errorImage, setErrorImage] = useState("");
   const [errorMp3, setErrorMp3] = useState("");
   const [errorArtist, setErrorArtist] = useState("");
@@ -48,8 +52,6 @@ function ModelSongAlbum({
   };
   const handleReset = () => {
     setName("");
-    
-   
   };
   const validate = () => {
     let check = true;
@@ -100,7 +102,6 @@ function ModelSongAlbum({
     if (!validate()) {
       return;
     }
-    
 
     const payload = {
       name: name,
@@ -117,14 +118,19 @@ function ModelSongAlbum({
   const fetchSaveSong = async (song) => {
     try {
       const listId = Array.from(song.listArtistID);
-      const data = await addSong(song.name, song.image, song.mp3, album.id, listId);
+      const data = await addSong(
+        song.name,
+        song.image,
+        song.mp3,
+        album.id,
+        listId
+      );
       if (data) {
         dispatch({ type: "RESET_ARTIST_SELECTED" });
-      } 
+      }
     } catch (error) {
       setError("thêm thất bại");
     }
-    
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -159,8 +165,7 @@ function ModelSongAlbum({
                   display: "flex",
                   flexDirection: "column",
                 }}
-                encType="multipart/form-data"
-              >
+                encType="multipart/form-data">
                 <FormGroup className="formgroup">
                   <label>Tên bài hát</label>
                   <input
@@ -211,8 +216,7 @@ function ModelSongAlbum({
                     backgroundColor: "#8B45CA",
                     color: "white",
                   }}
-                  onClick={handleAddSong}
-                >
+                  onClick={handleAddSong}>
                   Thêm bài hát
                 </button>
               </div>
@@ -249,8 +253,7 @@ function ModelSongAlbum({
                             className="btn btn-danger"
                             onClick={() => {
                               dispatch(deleteSongSave(index));
-                            }}
-                          >
+                            }}>
                             Xóa
                           </button>
                         </td>
@@ -261,8 +264,7 @@ function ModelSongAlbum({
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={handleSubmit}
-              >
+                onClick={handleSubmit}>
                 Lưu những thay đổi
               </button>
             </div>

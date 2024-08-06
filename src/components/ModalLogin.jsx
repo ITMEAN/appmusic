@@ -6,14 +6,13 @@ import { useNavigate } from "react-router-dom";
 import { resetRole, setRole, useAppContext } from "../context/AppContext";
 import { login } from "../service/AuthService";
 
-
-function LoginModal({ showed, onHide ,role}) {
+function LoginModal({ showed, onHide, role }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error,setError]=useState(false);
-  const {state,dispatch}=useAppContext();
-  const navigate=useNavigate();
- 
+  const [error, setError] = useState(false);
+  const { state, dispatch } = useAppContext();
+  const navigate = useNavigate();
+
   const handleEmail = (e) => {
     console.log(e.target.value);
     setEmail(e.target.value);
@@ -22,38 +21,30 @@ function LoginModal({ showed, onHide ,role}) {
     setPassword(e.target.value);
   };
 
-  
   const handleLogin = () => {
-    const fetchLogin =  () => {
-    
-       login(email,password).then((data) => {
-        if(data?.token){
-
-            localStorage.setItem("user",JSON.stringify(data));
-            localStorage.setItem("token",JSON.stringify(data.token));
-            const decoded = jwtDecode(data.token);
-            console.log(role);
-            console.log(decoded);
-           if(role==='ALL'){
-              window.location.reload();
-           }
-           else if(Array.from(decoded.roles).includes(role)){
-                if(role==='USER'){
-                  dispatch(resetRole());
-                  dispatch(setRole('USER'));
-                   onHide();
-                }
-                else{
-                  dispatch(setRole('ADMIN'));
-                  navigate('/admin');
-                  onHide();
-                  
-                }
-           }else{
-            setError('Bạn không có quyền truy cập');
-           }
-
-            
+    const fetchLogin = () => {
+      login(email, password).then((data) => {
+        if (data?.token) {
+          localStorage.setItem("user", JSON.stringify(data));
+          localStorage.setItem("token", JSON.stringify(data.token));
+          const decoded = jwtDecode(data.token);
+          console.log(role);
+          console.log(decoded);
+          if (role === "ALL") {
+            window.location.reload();
+          } else if (Array.from(decoded.roles).includes(role)) {
+            if (role === "USER") {
+              dispatch(resetRole());
+              dispatch(setRole("USER"));
+              onHide();
+            } else {
+              dispatch(setRole("ADMIN"));
+              navigate("/admin");
+              onHide();
+            }
+          } else {
+            setError("Bạn không có quyền truy cập");
+          }
         }
       });
     };
@@ -84,8 +75,8 @@ function LoginModal({ showed, onHide ,role}) {
               onChange={(e) => handlePassword(e)}
             />
           </Form.Group>
-          {error&&<p style={{color:'red'}}>{error}</p>}
-          <Button variant="primary" type="button" onClick={()=>handleLogin()}>
+          {error && <p style={{ color: "red" }}>{error}</p>}
+          <Button variant="primary" type="button" onClick={() => handleLogin()}>
             Đăng nhập
           </Button>
         </Form>

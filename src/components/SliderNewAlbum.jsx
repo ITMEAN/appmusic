@@ -8,7 +8,6 @@ import { getAlbumNew } from "../service/AlbumService";
 function SliderNewAllBUm() {
     const [newAlbum, setNewAlbum] = useState([]);
     const settings = {
-      
         slidesToShow: 4,
         slidesToScroll: 1,
         infinite: true,
@@ -16,9 +15,9 @@ function SliderNewAllBUm() {
         autoplay: true,
         responsive: [
             {
-                breakpoint: 1024,
+                breakpoint:2024,
                 settings: {
-                    slidesToShow: 2,
+                    slidesToShow: 4,
                     slidesToScroll: 1,
                 },
             },
@@ -30,7 +29,6 @@ function SliderNewAllBUm() {
                 },
             },
         ]
-    
         
       };
     useEffect(()=>{

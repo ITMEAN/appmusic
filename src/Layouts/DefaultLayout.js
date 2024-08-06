@@ -12,14 +12,12 @@ function DefaultLayout({children}) {
       };
     return (
           <div className="default-layout">
-                
                 <MenuBar/>
                 <div className="section">
                    <Header/>
                    <div className="content">{children}</div>
                 </div>
-                <MusicPlayer song={song} />
-                
+                <MusicPlayer song={song} />     
           </div>
           );
 }
