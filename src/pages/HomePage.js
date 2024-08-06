@@ -71,7 +71,7 @@ function Home() {
     <div className="homepage">
       <Suspense fallback={<div>Loading...</div>}>
         {loading ? (
-          <LoadingModal showed={loading} onHide={() => setLoading(false)} />
+          <span>Loading...</span>
         ) : (
           <>
             <h4 className="title-category">KHÁM PHÁ ALBUM</h4>
